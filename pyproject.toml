@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "carbon-pulse"
+version = "0.1.0"
+description = "Real-time carbon intensity monitoring pipeline and dashboard"
+authors = [
+    {name = "Carbon Pulse Team", email = "team@carbonpulse.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "streamlit>=1.28.0",
+    "pandas>=2.2.0",
+    "duckdb>=0.9.0",
+    "requests>=2.31.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "apache-airflow>=2.7.0",
+    "dbt-core>=1.7.0",
+    "dbt-duckdb>=1.7.0",
+    "great-expectations>=0.18.0",
+    "prometheus-client>=0.19.0",
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "httpx>=0.25.0",
+    "loguru>=0.7.0",
+    "responses>=0.25.7",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.5.0",
+    "responses>=0.24.0",
+]
+
+[project.scripts]
+carbon-pulse-api = "carbon_pulse.api.main:main"
+carbon-pulse-dashboard = "carbon_pulse.dashboard.main:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short" 

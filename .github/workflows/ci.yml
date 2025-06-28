@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: latest
+    
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+    
+    - name: Run linting
+      run: |
+        uv run black --check .
+        uv run isort --check-only .
+        uv run flake8 .
+        uv run mypy carbon_pulse/
+    
+    - name: Run tests
+      run: |
+        uv run pytest tests/ -v --cov=carbon_pulse --cov-report=xml
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run security scan
+      uses: github/codeql-action/init@v2
+      with:
+        languages: python
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+    
+    - name: Run bandit security scan
+      run: |
+        pip install bandit
+        bandit -r carbon_pulse/ -f json -o bandit-report.json || true
+    
+    - name: Upload security scan results
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-scan-results
+        path: bandit-report.json
+
+  data-validation:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: latest
+    
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+    
+    - name: Run dbt tests
+      run: |
+        uv run dbt test
+    
+    - name: Run Great Expectations validation
+      run: |
+        uv run great_expectations checkpoint run carbon_intensity_data_quality 

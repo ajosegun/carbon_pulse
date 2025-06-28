@@ -1,0 +1,13 @@
+carbon_pulse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: data/carbon_pulse.duckdb
+      schema: main
+      threads: 4
+    prod:
+      type: duckdb
+      path: data/carbon_pulse.duckdb
+      schema: main
+      threads: 8 

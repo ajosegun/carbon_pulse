@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw data from the database
+    tables:
+      - name: carbon_intensity
+        description: Raw carbon intensity data from Electricity Maps API
+        columns:
+          - name: id
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: zone
+            description: Zone identifier
+            tests:
+              - not_null
+          - name: timestamp
+            description: Timestamp of the measurement
+            tests:
+              - not_null
+          - name: carbon_intensity
+            description: Carbon intensity in gCO2eq/kWh
+            tests:
+              - not_null
+              - positive_values
+      
+      - name: zones
+        description: Zone information from Electricity Maps API
+        columns:
+          - name: zone
+            description: Zone identifier
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: Zone name
+            tests:
+              - not_null 
