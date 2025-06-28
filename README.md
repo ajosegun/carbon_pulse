@@ -269,10 +269,6 @@ uv run flake8 .
 uv run mypy carbon_pulse/
 ```
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 ## 🙏 Acknowledgments
 
 - [Electricity Maps](https://electricitymaps.com/) for providing the carbon intensity data
@@ -281,14 +277,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Great Expectations](https://greatexpectations.io/) for data validation
 - [FastAPI](https://fastapi.tiangolo.com/) for the API framework
 - [Streamlit](https://streamlit.io/) for the dashboard
-
-## 📞 Support
-
-For support and questions:
-
-- Create an issue on GitHub
-- Join our Discord community
-- Email: support@carbonpulse.com
 
 ---
 
